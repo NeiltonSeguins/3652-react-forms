@@ -1,32 +1,20 @@
-import { useState } from "react";
 import { Button, Label, Fieldset, Input, Form, Titulo } from "../../components";
+import { useForm } from "react-hook-form";
 
 const CadastroPessoal = () => {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [senha, setSenha] = useState("");
-  const [senhaVerificada, setSenhaVerificada] = useState("");
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log({ nome, email, senha, telefone, senhaVerificada });
-  };
+  const { register, handleSubmit } = useForm();
 
   return (
     <>
       <Titulo>Insira alguns dados básicos:</Titulo>
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Fieldset>
           <Label htmlFor="campo-nome">Nome</Label>
           <Input
             id="campo-nome"
             placeholder="Digite seu nome completo"
             type="text"
-            value={nome}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setNome(e.target.value)
-            }
+            {...register("nome")}
           />
         </Fieldset>
         <Fieldset>
@@ -35,10 +23,7 @@ const CadastroPessoal = () => {
             id="campo-email"
             placeholder="Insira seu endereço de email"
             type="email"
-            value={email}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
+            {...register("email")}
           />
         </Fieldset>
 
@@ -48,10 +33,7 @@ const CadastroPessoal = () => {
             id="campo-telefone"
             type="text"
             placeholder="Ex: (DDD) XXXXX-XXXX"
-            value={telefone}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setTelefone(e.target.value)
-            }
+            {...register("telefone")}
           />
         </Fieldset>
 
@@ -61,10 +43,7 @@ const CadastroPessoal = () => {
             id="campo-senha"
             placeholder="Crie uma senha"
             type="password"
-            value={senha}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSenha(e.target.value)
-            }
+            {...register("senha")}
           />
         </Fieldset>
         <Fieldset>
@@ -73,10 +52,7 @@ const CadastroPessoal = () => {
             id="campo-senha-confirmacao"
             placeholder="Repita a senha anterior"
             type="password"
-            value={senhaVerificada}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSenhaVerificada(e.target.value)
-            }
+            {...register("senhaVerificada")}
           />
         </Fieldset>
         <Button type="submit">Avançar</Button>
