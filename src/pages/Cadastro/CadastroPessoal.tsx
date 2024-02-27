@@ -1,4 +1,12 @@
-import { Button, Label, Fieldset, Input, Form, Titulo } from "../../components";
+import {
+  Button,
+  Label,
+  Fieldset,
+  Input,
+  Form,
+  Titulo,
+  ErrorMessage,
+} from "../../components";
 import { useForm } from "react-hook-form";
 
 interface FormInputTipos {
@@ -10,7 +18,11 @@ interface FormInputTipos {
 }
 
 const CadastroPessoal = () => {
-  const { register, handleSubmit } = useForm<FormInputTipos>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInputTipos>();
 
   const aoSubmeter = (dados: FormInputTipos) => {
     console.log(dados);
@@ -35,8 +47,10 @@ const CadastroPessoal = () => {
             id="campo-nome"
             placeholder="Digite seu nome completo"
             type="text"
+            $error={!!errors.nome}
             {...register("nome", { required: true, minLength: 5 })}
           />
+          {errors.nome && <ErrorMessage>{errors.nome.message}</ErrorMessage>}
         </Fieldset>
         <Fieldset>
           <Label htmlFor="campo-email">E-mail</Label>
