@@ -48,7 +48,13 @@ const CadastroPessoal = () => {
             placeholder="Digite seu nome completo"
             type="text"
             $error={!!errors.nome}
-            {...register("nome", { required: true, minLength: 5 })}
+            {...register("nome", {
+              required: "Campo de nome é obrigatório",
+              minLength: {
+                value: 5,
+                message: "O nome deve ter pelo menos cinco caracteres",
+              },
+            })}
           />
           {errors.nome && <ErrorMessage>{errors.nome.message}</ErrorMessage>}
         </Fieldset>
@@ -58,8 +64,12 @@ const CadastroPessoal = () => {
             id="campo-email"
             placeholder="Insira seu endereço de email"
             type="email"
-            {...register("email", { required: true, validate: validarEmail })}
+            {...register("email", {
+              required: "O campo de email é obrigatório",
+              validate: validarEmail,
+            })}
           />
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </Fieldset>
 
         <Fieldset>
@@ -69,10 +79,16 @@ const CadastroPessoal = () => {
             type="text"
             placeholder="Ex: (DD) XXXXX-XXXX"
             {...register("telefone", {
-              pattern: /^\(\d{2,3}\) \d{5}-\d{4}$/,
-              required: true,
+              pattern: {
+                value: /^\(\d{2,3}\) \d{5}-\d{4}$/,
+                message: "O telefone inserido está no formato incorreto",
+              },
+              required: "O campo telefone é obrigatório",
             })}
           />
+          {errors.telefone && (
+            <ErrorMessage>{errors.telefone.message}</ErrorMessage>
+          )}
         </Fieldset>
 
         <Fieldset>
@@ -81,8 +97,15 @@ const CadastroPessoal = () => {
             id="campo-senha"
             placeholder="Crie uma senha"
             type="password"
-            {...register("senha")}
+            {...register("senha", {
+              required: "O campo de senha é obrigatório",
+              minLength: {
+                value: 6,
+                message: "A senha deve ter pelo menos seis caracteres",
+              },
+            })}
           />
+          {errors.senha && <ErrorMessage>{errors.senha.message}</ErrorMessage>}
         </Fieldset>
         <Fieldset>
           <Label htmlFor="campo-senha-confirmacao">Repita a senha</Label>
