@@ -16,6 +16,15 @@ const CadastroPessoal = () => {
     console.log(dados);
   };
 
+  function validarEmail(valor: string) {
+    const formatoEmail = /^[^\s@]+@alura\.com\.br$/;
+    if (!formatoEmail.test(valor)) {
+      console.error("Endereço de email é inválido para este domínio");
+      return false;
+    }
+    return true;
+  }
+
   return (
     <>
       <Titulo>Insira alguns dados básicos:</Titulo>
@@ -35,7 +44,7 @@ const CadastroPessoal = () => {
             id="campo-email"
             placeholder="Insira seu endereço de email"
             type="email"
-            {...register("email")}
+            {...register("email", { required: true, validate: validarEmail })}
           />
         </Fieldset>
 
