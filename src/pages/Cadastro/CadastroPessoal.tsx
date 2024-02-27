@@ -1,13 +1,25 @@
 import { Button, Label, Fieldset, Input, Form, Titulo } from "../../components";
 import { useForm } from "react-hook-form";
 
+interface FormInputTipos {
+  nome: string;
+  email: string;
+  telefone: string;
+  senha: string;
+  senhaVerificada: string;
+}
+
 const CadastroPessoal = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormInputTipos>();
+
+  const aoSubmeter = (dados: FormInputTipos) => {
+    console.log(dados);
+  };
 
   return (
     <>
       <Titulo>Insira alguns dados básicos:</Titulo>
-      <Form>
+      <Form onSubmit={handleSubmit(aoSubmeter)}>
         <Fieldset>
           <Label htmlFor="campo-nome">Nome</Label>
           <Input
