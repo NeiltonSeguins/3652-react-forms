@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import {
   Button,
+  ErrorMessage,
   Fieldset,
   Form,
   FormContainer,
@@ -18,11 +19,20 @@ interface FormInputEndereco {
 }
 
 const CadastroEndereco = () => {
-  const { register, handleSubmit, setError } = useForm<FormInputEndereco>();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<FormInputEndereco>();
 
   const aoSubmeter = (dados: FormInputEndereco) => {
     console.log(dados);
   };
+
+  const cepDigitado = watch("cep");
 
   const fethEndereco = async (cep: string) => {
     if (!cep) {
@@ -38,13 +48,17 @@ const CadastroEndereco = () => {
       const response = await fetch(`http://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
 
-      console.log(data);
+      if (response.ok) {
+        setValue("rua", data.logradouro);
+        setValue("localidade", `${data.localidade}, ${data.uf}`);
+        setValue("bairro", data.bairro);
+      } else {
+        throw new Error("Cep inválido");
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
-  console.log(fethEndereco("01001000"));
 
   return (
     <>
@@ -57,7 +71,10 @@ const CadastroEndereco = () => {
             placeholder="Insira seu CEP"
             type="text"
             {...register("cep")}
+            $error={!!errors.cep}
+            onBlur={() => fethEndereco(cepDigitado)}
           />
+          {errors.cep && <ErrorMessage>{errors.cep.message}</ErrorMessage>}
         </Fieldset>
         <Fieldset>
           <Label htmlFor="campo-rua">Rua</Label>
@@ -65,8 +82,10 @@ const CadastroEndereco = () => {
             id="campo-rua"
             placeholder="Rua Agarikov"
             type="text"
+            $error={!!errors.rua}
             {...register("rua")}
           />
+          {errors.rua && <ErrorMessage>{errors.rua.message}</ErrorMessage>}
         </Fieldset>
 
         <FormContainer>
@@ -76,8 +95,12 @@ const CadastroEndereco = () => {
               id="campo-numero-rua"
               placeholder="Ex: 1440"
               type="text"
+              $error={!!errors.numero}
               {...register("numero")}
             />
+            {errors.numero && (
+              <ErrorMessage>{errors.numero.message}</ErrorMessage>
+            )}
           </Fieldset>
           <Fieldset>
             <Label htmlFor="campo-bairro">Bairro</Label>
@@ -85,8 +108,12 @@ const CadastroEndereco = () => {
               id="campo-bairro"
               placeholder="Vila Mariana"
               type="text"
+              $error={!!errors.bairro}
               {...register("bairro")}
             />
+            {errors.bairro && (
+              <ErrorMessage>{errors.bairro.message}</ErrorMessage>
+            )}
           </Fieldset>
         </FormContainer>
         <Fieldset>
@@ -95,8 +122,12 @@ const CadastroEndereco = () => {
             id="campo-localidade"
             placeholder="São Paulo, SP"
             type="text"
+            $error={!!errors.localidade}
             {...register("localidade")}
           />
+          {errors.localidade && (
+            <ErrorMessage>{errors.localidade.message}</ErrorMessage>
+          )}
         </Fieldset>
         <Button type="submit">Cadastrar</Button>
       </Form>
