@@ -18,11 +18,34 @@ interface FormInputEndereco {
 }
 
 const CadastroEndereco = () => {
-  const { register, handleSubmit } = useForm<FormInputEndereco>();
+  const { register, handleSubmit, setError } = useForm<FormInputEndereco>();
 
   const aoSubmeter = (dados: FormInputEndereco) => {
     console.log(dados);
   };
+
+  const fethEndereco = async (cep: string) => {
+    if (!cep) {
+      setError("cep", {
+        type: "manual",
+        message: "Cep inválido",
+      });
+
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  console.log(fethEndereco("01001000"));
+
   return (
     <>
       <Titulo>Agora, mais alguns dados sobre você:</Titulo>
