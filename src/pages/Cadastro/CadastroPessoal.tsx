@@ -22,10 +22,21 @@ const CadastroPessoal = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<FormInputTipos>();
 
   const aoSubmeter = (dados: FormInputTipos) => {
     console.log(dados);
+  };
+
+  const senha = watch("senha");
+
+  const validaSenha = {
+    obrigatorio: (val: string) =>
+      !!val || "Por favor, insira a senha novamente",
+    tamanhoMinimo: (val: string) =>
+      val.length >= 6 || "A senha deve ter pelo menos 6 caracteres",
+    senhaIguais: (val: string) => val === senha || "As senhas não correspondem",
   };
 
   function validarEmail(valor: string) {
@@ -113,8 +124,14 @@ const CadastroPessoal = () => {
             id="campo-senha-confirmacao"
             placeholder="Repita a senha anterior"
             type="password"
-            {...register("senhaVerificada")}
+            {...register("senhaVerificada", {
+              required: "Repita a senha",
+              validate: validaSenha,
+            })}
           />
+          {errors.senhaVerificada && (
+            <ErrorMessage>{errors.senhaVerificada.message}</ErrorMessage>
+          )}
         </Fieldset>
         <Button type="submit">Avançar</Button>
       </Form>
