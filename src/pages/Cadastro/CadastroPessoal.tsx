@@ -7,7 +7,8 @@ import {
   Titulo,
   ErrorMessage,
 } from "../../components";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import InputMask from "../../components/InputMask";
 
 interface FormInputTipos {
   nome: string;
@@ -23,6 +24,7 @@ const CadastroPessoal = () => {
     handleSubmit,
     formState: { errors },
     watch,
+    control,
   } = useForm<FormInputTipos>();
 
   const aoSubmeter = (dados: FormInputTipos) => {
@@ -82,25 +84,31 @@ const CadastroPessoal = () => {
           />
           {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </Fieldset>
-
-        <Fieldset>
-          <Label>Telefone</Label>
-          <Input
-            id="campo-telefone"
-            type="text"
-            placeholder="Ex: (DD) XXXXX-XXXX"
-            {...register("telefone", {
-              pattern: {
-                value: /^\(\d{2,3}\) \d{5}-\d{4}$/,
-                message: "O telefone inserido está no formato incorreto",
-              },
-              required: "O campo telefone é obrigatório",
-            })}
-          />
-          {errors.telefone && (
-            <ErrorMessage>{errors.telefone.message}</ErrorMessage>
+        <Controller
+          control={control}
+          name="telefone"
+          rules={{
+            pattern: {
+              value: /^\(\d{2,3}\) \d{5}-\d{4}$/,
+              message: "O telefone inserido está no formato incorreto",
+            },
+            required: "O campo telefone é obrigatório",
+          }}
+          render={({ field }) => (
+            <Fieldset>
+              <Label>Telefone</Label>
+              <InputMask
+                mask="(99) 99999-9999"
+                placeholder="Ex: (DD) XXXXX-XXXX"
+                $error={!!errors.telefone}
+                onChange={field.onChange}
+              />
+              {errors.telefone && (
+                <ErrorMessage>{errors.telefone.message}</ErrorMessage>
+              )}
+            </Fieldset>
           )}
-        </Fieldset>
+        />
 
         <Fieldset>
           <Label htmlFor="campo-senha">Crie uma senha</Label>
