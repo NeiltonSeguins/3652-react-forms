@@ -26,7 +26,16 @@ const CadastroEndereco = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<FormInputEndereco>();
+  } = useForm<FormInputEndereco>({
+    mode: "all",
+    defaultValues: {
+      cep: "",
+      rua: "",
+      bairro: "",
+      numero: "",
+      localidade: "",
+    },
+  });
 
   const aoSubmeter = (dados: FormInputEndereco) => {
     console.log(dados);
@@ -70,7 +79,7 @@ const CadastroEndereco = () => {
             id="campo-cep"
             placeholder="Insira seu CEP"
             type="text"
-            {...register("cep")}
+            {...register("cep", { required: "O campo é obrigatório" })}
             $error={!!errors.cep}
             onBlur={() => fethEndereco(cepDigitado)}
           />
@@ -83,7 +92,7 @@ const CadastroEndereco = () => {
             placeholder="Rua Agarikov"
             type="text"
             $error={!!errors.rua}
-            {...register("rua")}
+            {...register("rua", { required: "O campo é obrigatório" })}
           />
           {errors.rua && <ErrorMessage>{errors.rua.message}</ErrorMessage>}
         </Fieldset>
@@ -96,7 +105,7 @@ const CadastroEndereco = () => {
               placeholder="Ex: 1440"
               type="text"
               $error={!!errors.numero}
-              {...register("numero")}
+              {...register("numero", { required: "O campo é obrigatório" })}
             />
             {errors.numero && (
               <ErrorMessage>{errors.numero.message}</ErrorMessage>
@@ -109,7 +118,7 @@ const CadastroEndereco = () => {
               placeholder="Vila Mariana"
               type="text"
               $error={!!errors.bairro}
-              {...register("bairro")}
+              {...register("bairro", { required: "O campo é obrigatório" })}
             />
             {errors.bairro && (
               <ErrorMessage>{errors.bairro.message}</ErrorMessage>
@@ -123,7 +132,7 @@ const CadastroEndereco = () => {
             placeholder="São Paulo, SP"
             type="text"
             $error={!!errors.localidade}
-            {...register("localidade")}
+            {...register("localidade", { required: "O campo é obrigatório" })}
           />
           {errors.localidade && (
             <ErrorMessage>{errors.localidade.message}</ErrorMessage>
