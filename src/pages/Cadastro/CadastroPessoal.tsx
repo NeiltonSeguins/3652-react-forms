@@ -9,6 +9,7 @@ import {
 } from "../../components";
 import { useForm, Controller } from "react-hook-form";
 import InputMask from "../../components/InputMask";
+import { useEffect } from "react";
 
 interface FormInputTipos {
   nome: string;
@@ -22,10 +23,24 @@ const CadastroPessoal = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
     watch,
     control,
-  } = useForm<FormInputTipos>();
+    reset,
+  } = useForm<FormInputTipos>({
+    mode: "all",
+    defaultValues: {
+      nome: "",
+      email: "",
+      telefone: "",
+      senha: "",
+      senhaVerificada: "",
+    },
+  });
+
+  useEffect(() => {
+    reset();
+  }, [reset, isSubmitSuccessful]);
 
   const aoSubmeter = (dados: FormInputTipos) => {
     console.log(dados);
